@@ -10,7 +10,7 @@ Look for
                 > data
                         > com.sampleapprealm
                                             > files 
-                                                    default.realm
+                                                    > default.realm
 
 Right click on default.realm and click save as. 
 Save it in a folder that easy to find, usually desktop. 
