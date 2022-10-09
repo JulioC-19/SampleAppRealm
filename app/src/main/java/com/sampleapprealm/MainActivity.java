@@ -2,12 +2,17 @@ package com.sampleapprealm;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.sampleapprealm.dataAccessLayer.CourseSchema;
+
+import org.bson.types.ObjectId;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -25,26 +30,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        // on below line we are
-        // initializing our realm database.
-        Realm.init(this);
-
-        // on below line we are setting realm configuration
-        RealmConfiguration config = new RealmConfiguration.Builder()
-                // below line is to allow write
-                // data to database on ui thread.
-                .allowWritesOnUiThread(true)
-                // below line is to delete realm
-                // if migration is needed.
-                .deleteRealmIfMigrationNeeded()
-                // at last we are calling a method to build.
-                .build();
-        // on below line we are setting
-        // configuration to our realm database.
-        Realm.setDefaultConfiguration(config);
-
+        setContentView(R.layout.activity_add_course);
 
         // initializing our edittext and buttons
         realm = Realm.getDefaultInstance();
@@ -84,48 +70,38 @@ public class MainActivity extends AppCompatActivity {
                     courseTracksEdt.setText("");
                 }
             }
+
         });
     }
 
     private void addDataToDatabase(String courseName, String courseDescription, String courseDuration, String courseTracks) {
 
-        // on below line we are creating
-        // a variable for our modal class.
-        DataSchema modal = new DataSchema();
+        /* This is an old way of performing transactions, not too safe
+        realm.beginTransaction();
+        CourseSchema course = realm.createObject(CourseSchema.class, String.valueOf(new ObjectId()));
+        course.setCourseDescription(courseDescription);
+        course.setCourseName(courseName);
+        course.setCourseDuration(courseDuration);
+        course.setCourseTracks(courseTracks);
+        realm.commitTransaction();
+        */
 
-        // on below line we are getting id for the course which we are storing.
-        Number id = realm.where(DataSchema.class).max("id");
+        // Writing to realm from the UI must be an asynchronous operations
+        // Something is off about this method, or rather, can't fully understand it yet.
+        realm.executeTransactionAsync(realm -> {
+            CourseSchema course = realm.createObject(CourseSchema.class, String.valueOf(new ObjectId()));
+            course.setCourseDescription(courseDescription);
+            course.setCourseName(courseName);
+            course.setCourseDuration(courseDuration);
+            course.setCourseTracks(courseTracks);
 
-        // on below line we are
-        // creating a variable for our id.
-        long nextId;
-
-        // validating if id is null or not.
-        if (id == null) {
-            // if id is null
-            // we are passing it as 1.
-            nextId = 1;
-        } else {
-            // if id is not null then
-            // we are incrementing it by 1
-            nextId = id.intValue() + 1;
-        }
-        // on below line we are setting the
-        // data entered by user in our modal class.
-        modal.setId(nextId);
-        modal.setCourseDescription(courseDescription);
-        modal.setCourseName(courseName);
-        modal.setCourseDuration(courseDuration);
-        modal.setCourseTracks(courseTracks);
-
-        // on below line we are calling a method to execute a transaction.
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                // inside on execute method we are calling a method
-                // to copy to real m database from our modal class.
-                realm.copyToRealm(modal);
-            }
+        }, () -> { // This is lambda way instead of writing the full function name
+            /* success actions */
+            Log.i("Success", "New object added to realm!");
+            realm.close(); // Not sure if this the correct place to close the realm instance
+        }, error -> {
+            /* failure actions */
+            Log.e("Error", "Something went wrong! " + error);
         });
     }
 }
