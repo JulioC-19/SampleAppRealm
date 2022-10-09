@@ -1,13 +1,13 @@
-package com.sampleapprealm;
+package com.sampleapprealm.dataAccessLayer;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class DataSchema extends RealmObject {
+public class CourseSchema extends RealmObject {
     // on below line we are creating our variables
     // and with are using primary key for our id.
     @PrimaryKey
-    private long id;
+    private String id;
     private String courseName;
     private String courseDescription;
     private String courseTracks;
@@ -17,7 +17,7 @@ public class DataSchema extends RealmObject {
 
     // on below line we are
     // creating an empty constructor.
-    public DataSchema() {
+    public CourseSchema() {
     }
 
     // below line we are
@@ -30,12 +30,12 @@ public class DataSchema extends RealmObject {
         this.courseTracks = courseTracks;
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
     public void setId(long id) {
-        this.id = id;
+        this.id = String.valueOf(id);
     }
 
     public String getCourseName() {
