@@ -13,9 +13,8 @@ public class RealmConfig extends Application{
 
             // Configuring realm version 0
             RealmConfiguration realmConfig = new RealmConfiguration.Builder()
-                                                    .deleteRealmIfMigrationNeeded()
-                                                    .schemaVersion(0)
-                                                    .build();
+                                                    .schemaVersion(4).migration(new Migration())
+                                                    .build(); // need to add migration
             Realm.setDefaultConfiguration(realmConfig);
         }
 }

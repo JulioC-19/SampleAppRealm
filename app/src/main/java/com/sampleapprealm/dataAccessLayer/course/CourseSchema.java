@@ -1,4 +1,4 @@
-package com.sampleapprealm.dataAccessLayer;
+package com.sampleapprealm.dataAccessLayer.course;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -10,7 +10,7 @@ public class CourseSchema extends RealmObject {
     private String id;
     private String courseName;
     private String courseDescription;
-    private String courseTracks;
+    private String currentWeek;
     private String courseDuration;
 
     // List of realm objects
@@ -22,12 +22,12 @@ public class CourseSchema extends RealmObject {
 
     // below line we are
     // creating getter and setters.
-    public String getCourseTracks() {
-        return courseTracks;
+    public String getCurrentWeek() {
+        return currentWeek;
     }
 
-    public void setCourseTracks(String courseTracks) {
-        this.courseTracks = courseTracks;
+    public void setCurrentWeek(String currentWeek) {
+        this.currentWeek = currentWeek;
     }
 
     public String getId() {

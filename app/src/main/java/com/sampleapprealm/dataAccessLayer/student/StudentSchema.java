@@ -1,6 +1,6 @@
-package com.sampleapprealm.dataAccessLayer;
+package com.sampleapprealm.dataAccessLayer.student;
 
-import com.sampleapprealm.dataAccessLayer.CourseSchema;
+import com.sampleapprealm.dataAccessLayer.course.CourseSchema;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -11,19 +11,21 @@ public class StudentSchema extends RealmObject{
     // on below line we are creating our variables
     // and with are using primary key for our id.
     @PrimaryKey
-    private long id;
+    private String id;
     private String firstName;
     private String lastName;
     private String enrollmentPeriod;
+    private Boolean inState;
+
 
     private RealmList<CourseSchema> courses;
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
     public void setId(long id) {
-        this.id = id;
+        this.id = String.valueOf(id);
     }
 
     public String getFirstName() {
@@ -57,4 +59,17 @@ public class StudentSchema extends RealmObject{
     public void setCourses(RealmList<CourseSchema> courses) {
         this.courses = courses;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Boolean getInState() {
+        return inState;
+    }
+
+    public void setInState(Boolean inState) {
+        this.inState = inState;
+    }
+
 }
