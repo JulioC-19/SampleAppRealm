@@ -1,107 +1,37 @@
 package com.sampleapprealm;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
-
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.sampleapprealm.dataAccessLayer.CourseSchema;
-
-import org.bson.types.ObjectId;
-
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends AppCompatActivity {
-
-    // creating variables for our edit text
-    private EditText courseNameEdt, courseDurationEdt, courseDescriptionEdt, courseTracksEdt;
-    private Realm realm;
-
-    // creating a strings for storing
-    // our values from edittext fields.
-    private String courseName, courseDuration, courseDescription, courseTracks;
-
+    // Array of strings...
+    String[] mobileArray = {"Android","IPhone","WindowsMobile","Blackberry",
+            "WebOS","Ubuntu","Windows7","Max OS X"};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_course);
+        setContentView(R.layout.activity_main);
 
-        // initializing our edittext and buttons
-        realm = Realm.getDefaultInstance();
-        courseNameEdt = findViewById(R.id.idEdtCourseName);
-        courseDescriptionEdt = findViewById(R.id.idEdtCourseDescription);
-        courseDurationEdt = findViewById(R.id.idEdtCourseDuration);
+        ArrayAdapter adapter = new ArrayAdapter<String>(this,
+                R.layout.activity_student_row, mobileArray);
 
-        // creating variable for button
-        Button submitCourseBtn = findViewById(R.id.idBtnAddCourse);
-        courseTracksEdt = findViewById(R.id.idEdtCourseTracks);
-        submitCourseBtn.setOnClickListener(new View.OnClickListener() {
+        ListView listView = (ListView) findViewById(R.id.studentList);
+        listView.setAdapter(adapter);
+
+        FloatingActionButton addStudentFab = findViewById(R.id.addStudentFAB);
+        addStudentFab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-
-                // getting data from edittext fields.
-                courseName = courseNameEdt.getText().toString();
-                courseDescription = courseDescriptionEdt.getText().toString();
-                courseDuration = courseDurationEdt.getText().toString();
-                courseTracks = courseTracksEdt.getText().toString();
-
-                // validating the text fields if empty or not.
-                if (TextUtils.isEmpty(courseName)) {
-                    courseNameEdt.setError("Please enter Course Name");
-                } else if (TextUtils.isEmpty(courseDescription)) {
-                    courseDescriptionEdt.setError("Please enter Course Description");
-                } else if (TextUtils.isEmpty(courseDuration)) {
-                    courseDurationEdt.setError("Please enter Course Duration");
-                } else if (TextUtils.isEmpty(courseTracks)) {
-                    courseTracksEdt.setError("Please enter Course Tracks");
-                } else {
-                    // calling method to add data to Realm database..
-                    addDataToDatabase(courseName, courseDescription, courseDuration, courseTracks);
-                    Toast.makeText(MainActivity.this, "Course added to database..", Toast.LENGTH_SHORT).show();
-                    courseNameEdt.setText("");
-                    courseDescriptionEdt.setText("");
-                    courseDurationEdt.setText("");
-                    courseTracksEdt.setText("");
-                }
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, StudentActivity.class);
+                startActivity(intent);
             }
-
-        });
-    }
-
-    private void addDataToDatabase(String courseName, String courseDescription, String courseDuration, String courseTracks) {
-
-        /* This is an old way of performing transactions, not too safe
-        realm.beginTransaction();
-        CourseSchema course = realm.createObject(CourseSchema.class, String.valueOf(new ObjectId()));
-        course.setCourseDescription(courseDescription);
-        course.setCourseName(courseName);
-        course.setCourseDuration(courseDuration);
-        course.setCourseTracks(courseTracks);
-        realm.commitTransaction();
-        */
-
-        // Writing to realm from the UI must be an asynchronous operations
-        // Something is off about this method, or rather, can't fully understand it yet.
-        realm.executeTransactionAsync(realm -> {
-            CourseSchema course = realm.createObject(CourseSchema.class, String.valueOf(new ObjectId()));
-            course.setCourseDescription(courseDescription);
-            course.setCourseName(courseName);
-            course.setCourseDuration(courseDuration);
-            course.setCourseTracks(courseTracks);
-
-        }, () -> { // This is lambda way instead of writing the full function name
-            /* success actions */
-            Log.i("Success", "New object added to realm!");
-            realm.close(); // Not sure if this the correct place to close the realm instance
-        }, error -> {
-            /* failure actions */
-            Log.e("Error", "Something went wrong! " + error);
         });
     }
 }

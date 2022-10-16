@@ -26,6 +26,15 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <activity
+            android:label="@string/action_course"
+            android:name=".CourseActivity">
+        </activity>
+        <activity
+            android:label="@string/action_student"
+            android:name=".StudentActivity">
+        </activity>
+
     </application>
 
 </manifest>
