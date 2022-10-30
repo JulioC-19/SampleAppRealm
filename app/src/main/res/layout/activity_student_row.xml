@@ -1,11 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--  Single List Item Design -->
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    android:elevation="8dp"
+    app:cardCornerRadius="4dp">
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/studentRow"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:padding="10dip"
-    android:textSize="16dip"
-    android:textStyle="bold" >
-</TextView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="3dp"
+        android:orientation="vertical">
+
+        <!--text view for our course name-->
+        <TextView
+            android:id="@+id/firstName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="3dp"
+            android:text="First Name"
+            android:textColor="@color/black" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <!--text view for our course tracks-->
+            <TextView
+                android:id="@+id/lastName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="3dp"
+                android:text="Last Name"
+                android:textColor="@color/black" />
+
+            <!--text view for our course duration-->
+            <TextView
+                android:id="@+id/enrollment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="3dp"
+                android:text="Enrollment"
+                android:textColor="@color/black" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
