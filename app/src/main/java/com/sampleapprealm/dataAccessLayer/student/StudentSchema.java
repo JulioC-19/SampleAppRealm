@@ -16,8 +16,6 @@ public class StudentSchema extends RealmObject{
     private String lastName;
     private String enrollmentPeriod;
     private Boolean inState;
-    private Boolean isAlumni;
-
 
     private RealmList<CourseSchema> courses;
 
