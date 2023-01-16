@@ -38,8 +38,37 @@ public class MainActivity extends AppCompatActivity {
 
         // on below lines we are initializing our variables.
         studentRecyclerView = findViewById(R.id.idStudentList);
+        Log.i("HI", "Hello world");
         realm = Realm.getDefaultInstance();
         studentList = new ArrayList<>();
+        List<StudentSchema> tempList = new ArrayList<>();
+        tempList = realm.where(StudentSchema.class).findAll();
+
+        if(tempList.size() > 0) {
+            //StudentSchema student = realm.where(StudentSchema.class).equalTo("firstName", "Julio").findFirst();
+            //Log.i("studentList", String.valueOf(tempList));
+            //Log.i("Julio", String.valueOf(student));
+
+            //realm.executeTransactionAsync(realm -> {
+                // Get a Schema to update.
+                /* *
+                    StudentSchema student3 = realm.where(StudentSchema.class).equalTo("id", "3").findFirst();
+                    // Update properties on the instance.
+                    // This change is saved to the realm.
+                    student3.setFirstName("Johnathon");
+                    student3.setLastName("Doeness");
+                * */
+            //});
+
+            /*
+            *       realm.executeTransactionAsync(realm -> {
+                    // Get a turtle to update.
+                    StudentSchema student2 = realm.where(StudentSchema.class).equalTo("id", "90").findFirst();
+                    student2.deleteFromRealm();
+                    student2 = null;
+            });
+            * */
+        }
 
         // calling a method to load
         // our recycler view with data.

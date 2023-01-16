@@ -12,6 +12,9 @@ import io.realm.RealmObjectSchema;
 import io.realm.RealmSchema;
 
 public class Migration implements RealmMigration {
+
+    private String[] arraySchema = {"CourseSchema","StudentSchema","UniversitySchema"};
+
     @Override
     public void migrate(DynamicRealm realm, long oldVersion, long newVersion) {
         Long version = oldVersion;
@@ -20,6 +23,7 @@ public class Migration implements RealmMigration {
 
         // DynamicRealm exposes an editable schema
         RealmSchema schema = realm.getSchema();
+        Log.i("Schema", String.valueOf(schema.getAll()));
 
         // Changes from version 0 to 1: Adding inState field to StudentSchema.
         // All properties will be initialized with the default value "".
